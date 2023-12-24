@@ -8,10 +8,10 @@ const sampleDataForTopicListItem = {
   label: "Nature",
 };
 
-const TopicListItem = () => {
+const TopicListItem = ({ topic, getPhotosByTopic }) => {
   return (
-    <div className="topic-list__item">
-      {/* Insert React */}
+    <div className="topic-list__item" onClick={() => getPhotosByTopic(topic.id)}>
+      <span>{topic.title}</span>
     </div>
   );
 };
