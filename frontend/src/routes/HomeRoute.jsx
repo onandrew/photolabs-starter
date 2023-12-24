@@ -3,16 +3,17 @@ import "../styles/HomeRoute.scss";
 import TopNavigationBar from "./TopNavigationBar";
 import PhotoList from "./PhotoList";
 import photos from "../mocks/photos";
-import topics from "../mocks/topics";
 
 const HomeRoute = (props) => {
   const [like, setLike] = useState([]);
   const toggleLike = (id) => like.includes(id) ? setLike(like.filter(e => e !== id)) : setLike([...like, id]);
-  const {topics, photos} = props;
+  const isLiked = (photoId) => like.includes(photoId);
+  const isFavPhotoExist = like.length > 0;
+  const {photos} = props;
   return (
   <div className="home-route">
-    <TopNavigationBar topics={topics}/>
-    <PhotoList like={like} toggleLike={toggleLike} photos={photos} />
+    <TopNavigationBar isFavPhotoExist={isFavPhotoExist}/>
+    <PhotoList isLiked={isLiked} toggleLike={toggleLike} photos={photos} />
   </div>
   );
 }
