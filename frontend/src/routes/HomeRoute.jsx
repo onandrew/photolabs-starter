@@ -1,26 +1,17 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import "../styles/HomeRoute.scss";
 import TopNavigationBar from "./TopNavigationBar";
-import PhotoList from "./PhotoList";
+import PhotoList from 'components/PhotoList';
 import photos from "../mocks/photos";
 
 
-const HomeRoute = (props) => {
-  const [like, setLike] = useState([]);
-  const toggleLike = (id) => like.includes(id) ? setLike(like.filter(e => e !== id)) : setLike([...like, id]);
-  const isLiked = (photoId) => like.includes(photoId);
-  const [modal, setModal] = useState(false);
-  const showModal = () => setModal(true);
-  const hideModal = () => setModal(false);
-  const isFavPhotoExist = like.length > 0;
-  const {photos} = props;
+const HomeRoute = ({ isFavPhotoExist, isLiked, toggleLike, showModal }) => {
   return (
-  <div className="home-route">
-    <TopNavigationBar isFavPhotoExist={isFavPhotoExist}/>
-    <PhotoList isLiked={isLiked} toggleLike={toggleLike} photos={photos} />
-    {modal && <PhotoDetailsModal hideModal={hideModal}/>}
-  </div>
+    <div className="home-route">
+      <TopNavigationBar isFavPhotoExist={isFavPhotoExist}/>
+      <PhotoList isLiked={isLiked} toggleLike={toggleLike} photos={photos} showModal={showModal}/>
+    </div>
   );
-}
+};
 
 export default HomeRoute;

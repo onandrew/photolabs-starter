@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 
 import PhotoListItem from './components/PhotoListItem';
 import TopNavigationBar from 'components/TopNavigationBar';
@@ -9,13 +9,22 @@ import topics from './mocks/topics.js';
 import photos from './mocks/photos.js';
 import PhotoDetailsModal from 'routes/PhotoDetailsModal';
 
-// Note: Rendering a single component to build components in isolation
 const App = () => {
+  const [like, setLike] = useState([]);
+  const toggleLike = (photoId) => like.includes(photoId) ? setLike(like.filter(e => e !== photoId)) : setLike([...like, photoId]);
+  const isLiked = (photoId) => like.includes(photoId);
+  const isFavPhotoExist = like.length > 0;
+  const [selectedPhoto, setSelectedPhoto] = useState();
+  const [modal, setModal] = useState(false);
+  const showModal = (photo) => {
+    setModal(true);
+    setSelectedPhoto(photo);
+  };
+  const hideModal = () => setModal(false);
   return (
     <div className="App">
-      <TopNavigationBar />
-      <PhotoList />
-      <HomeRoute topics={topics} photos={photos}/>
+      <HomeRoute isFavPhotoExist={isFavPhotoExist} isLiked={isLiked} toggleLike={toggleLike} showModal={showModal} />
+      {modal && <PhotoDetailsModal hideModal={hideModal} selectedPhoto={selectedPhoto} isLiked={isLiked} toggleLike={toggleLike} />}
     </div>
   );
 };
