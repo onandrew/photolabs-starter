@@ -56,17 +56,20 @@ const sampleDataForPhotoList = [
   },
 ];
 
-const PhotoList = (props) => {
+const PhotoList = ({ isLiked, toggleLike, photos, showModal }) => {
+  if (typeof(photos) === 'object') {
+    photos = Object.values(photos);
+  } 
+
   const { like, toggleLike, photos } = props;
   const photoList = photos.map(photo => {
     return (
-      <PhotoListItem key={photo.id} like={like} toggleLike={toggleLike} photoId={photo.id} data={photo} />
+      <PhotoListItem key={photo.id} isLiked={isLiked} toggleLike={toggleLike} photoId={photo.id} data={photo} showModal={() => showModal(photo)}/>
     );
   });
-
   return (
     <ul className="photo-list">
-      {photos}
+      {photoList}
     </ul>
   );
 };
