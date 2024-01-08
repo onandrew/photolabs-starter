@@ -1,13 +1,44 @@
-import React from 'react';
-import TopNavigationBar from 'components/TopNavigationBar';
-import PhotoList from 'components/PhotoList';
-import '../styles/HomeRoute.scss';
+import React from "react";
 
-const HomeRoute = ({ getAllPhotos, isFavPhotoExist, isLiked, toggleLike, photos, topics, getPhotosByTopic, showModal, dark, setDark }) => {
+import "../styles/HomeRoute.scss";
+import TopNavigation from "../components/TopNavigationBar";
+import PhotoList from "../components/PhotoList";
+
+const HomeRoute = (props) => {
+  const {
+    topics, 
+    photos, 
+    onPhotoClick, 
+    favPhotos, 
+    addFavPhoto, 
+    removeFavPhoto, 
+    currentTopic, 
+    updateTopic, 
+    resetFilters, 
+    showFavOnly,
+    toggleShowFavOnly, 
+  } = props;
+
   return (
     <div className="home-route">
-      <TopNavigationBar getAllPhotos={getAllPhotos} isFavPhotoExist={isFavPhotoExist} topics={topics} getPhotosByTopic={getPhotosByTopic} dark={dark} setDark={setDark}/>
-      <PhotoList isLiked={isLiked} toggleLike={toggleLike} photos={photos} showModal={showModal} dark={dark}/>
+      <TopNavigation
+        topics={topics}
+        favPhotos={favPhotos}
+        showFavOnly={showFavOnly}
+        currentTopic={currentTopic}
+        updateTopic={updateTopic}
+        resetFilters={resetFilters}
+        toggleShowFavOnly={toggleShowFavOnly}
+      />
+      <PhotoList
+        photos={photos}
+        favPhotos={favPhotos}
+        addFavPhoto={addFavPhoto}
+        removeFavPhoto={removeFavPhoto}
+        onPhotoClick={onPhotoClick}
+        showFavOnly={showFavOnly}
+        currentTopic={currentTopic}
+      />
     </div>
   );
 };

@@ -2,16 +2,24 @@ import React from "react";
 
 import "../styles/TopicListItem.scss";
 
-const sampleDataForTopicListItem = {
-  id: "1",
-  slug: "topic-1",
-  label: "Nature",
-};
+const TopicListItem = (props) => {
+  const { id, label, link, onClick, currentTopic } = props;
 
-const TopicListItem = ({ topic, getPhotosByTopic }) => {
+  const handleClick = (event) => {
+    event.preventDefault(); 
+    onClick(); 
+  };
+
   return (
-    <div className="topic-list__item" onClick={() => getPhotosByTopic(topic.id)}>
-      <span>{topic.title}</span>
+    <div className="topic-list--item">
+      <a
+        href={link}
+        key={id}
+        className={id === currentTopic ? "topic-list--item-link--active" : "topic-list--item-link" }
+        onClick={handleClick}
+      >
+        <span>{label}</span>
+      </a>
     </div>
   );
 };

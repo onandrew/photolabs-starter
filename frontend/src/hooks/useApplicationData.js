@@ -1,112 +1,83 @@
-import { useReducer, useEffect } from 'react';
+import { useReducer, useEffect } from "react";
+import { reducer, ACTIONS } from "../reducer/reducer";
 
-const INITIAL_STATE = {
-  likes: [],
-  selectedPhoto: null,
-  selectedTopic: null,
-  modal: false,
-  photoData: [],
-  topicData: [],
-  dark: ''
-};
-
-const ACTIONS = {
-  TOGGLE_LIKE: 'TOGGLE_LIKE',
-  SELECT_PHOTO: 'SELECT_PHOTO',
-  SELECT_TOPIC: 'SELECT_TOPIC',
-  CLOSE_PHOTO: 'CLOSE_PHOTO',
-  SET_PHOTO_DATA: 'SET_PHOTO_DATA',
-  SET_TOPIC_DATA: 'SET_TOPIC_DATA',
-  TOGGLE_DARK_MODE: 'TOGGLE_DARK_MODE'
-};
-
-// function to specify how state is updated
-// returns updated state
-const reducer = (state, action) => {
-  switch (action.type) {
-    case ACTIONS.TOGGLE_LIKE:
-      const photoId = action.payload;
-      if (state.likes.includes(photoId)) {
-        return { ...state, likes: state.likes.filter(id => id !== photoId) };
-      };
-      return { ...state, likes: [...state.likes, photoId] };
-
-    case ACTIONS.SELECT_PHOTO:
-      return { ...state, modal: true, selectedPhoto: action.payload };
-
-    case ACTIONS.SELECT_TOPIC:
-      return { ...state, selectedTopic: action.payload };
-
-    case ACTIONS.CLOSE_PHOTO:
-      return { ...state, modal: false, selectedPhoto: null };
-
-    case ACTIONS.SET_PHOTO_DATA:
-      return { ...state, photoData: action.payload };
-
-    case ACTIONS.SET_TOPIC_DATA:
-      return { ...state, topicData: action.payload };
-
-    case ACTIONS.TOGGLE_DARK_MODE:
-      if (state.dark === 'dark') {
-        return { ...state, dark: '' };
-      }
-      return { ...state, dark: 'dark' };
-
-    default:
-      throw new Error(`Tried to reduce with unsupported action type: ${action.type}`);
-  }
-};
-
-// exported custom hook for managing state
-// returns state and functions needed for application
 export const useApplicationData = () => {
-  const [state, dispatch] = useReducer(reducer, INITIAL_STATE);
-
-  const updateToFavPhotoIds = photoId => dispatch({ type: ACTIONS.TOGGLE_LIKE, payload: photoId });
-
-  const setPhotoSelected = photo => dispatch({ type: ACTIONS.SELECT_PHOTO, payload: photo });
-
-  const getPhotosByTopic = topicId => dispatch({ type: ACTIONS.SELECT_TOPIC, payload: topicId });
-
-  const onClosePhotoDetailsModal = () => dispatch({ type: ACTIONS.CLOSE_PHOTO });
-
-  const setDark = () => dispatch({ type: ACTIONS.TOGGLE_DARK_MODE });
-
-  // fetch all photos
-  const getAllPhotos = () => {
-    fetch(`/api/photos`)
-      .then(res => res.json())
-      .then(photoData => dispatch({ type: ACTIONS.SET_PHOTO_DATA, payload: photoData }));
+  const initialState = {
+    showModal: false,
+    clickedPhoto: null,
+    favPhotos: {},
+    topicsData: [],
+    photosData: [],
+    currentTopic: undefined,
+    showFavOnly: false,
   };
 
-  // fetch all photos on intial render
-  useEffect(() => {
-    getAllPhotos();
-  }, []);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
-  // fetch all topics
   useEffect(() => {
-    fetch(`/api/topics`)
-      .then(res => res.json())
-      .then(topicData => dispatch({ type: ACTIONS.SET_TOPIC_DATA, payload: topicData }));
-  }, []);
+    let url = "/api/photos";
 
-  // fetch photos based on topic
-  useEffect(() => {
-    if (state.selectedTopic) {
-      fetch(`/api/topics/photos/${state.selectedTopic}`)
-        .then(res => res.json())
-        .then(photosByTopic => dispatch({ type: ACTIONS.SET_PHOTO_DATA, payload: photosByTopic }));
+    if (state.currentTopic !== undefined) {
+      url = `http://localhost:3000/api/topics/photos/${state.currentTopic}`;
     }
-  }, [state.selectedTopic]);
+
+    fetch("/api/topics")
+      .then((response) => response.json())
+      .then((data) => {
+        dispatch({ type: ACTIONS.SET_TOPICS, payload: data });
+      })
+      .catch((error) => {
+        console.error("Error fetching topics:", error);
+      });
+
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        dispatch({ type: ACTIONS.SET_PHOTOS, payload: data });
+      })
+      .catch((error) => {
+        console.error("Error fetching photos:", error);
+      });
+  }, [state.currentTopic]);
+
+  const handlePhotoClick = (photoProps) => {
+    dispatch({ type: ACTIONS.SET_CLICKED_PHOTO, payload: photoProps });
+    dispatch({ type: ACTIONS.SHOW_MODAL });
+  };
+
+  const closeModal = () => {
+    dispatch({ type: ACTIONS.CLOSE_MODAL });
+  };
+
+  const addFavPhoto = (photoId) => {
+    dispatch({ type: ACTIONS.ADD_FAV_PHOTO, payload: photoId });
+  };
+
+  const removeFavPhoto = (photoId) => {
+    dispatch({ type: ACTIONS.REMOVE_FAV_PHOTO, payload: photoId });
+  };
+
+  const updateTopic = (topicId) => {
+    dispatch({ type: ACTIONS.SET_TOPIC, payload: topicId });
+  };
+
+  const resetFilters = () => {
+    dispatch({ type: ACTIONS.SET_TOPIC, payload: undefined });
+    dispatch({ type: ACTIONS.TOGGLE_SHOW_FAV_ONLY, payload: false });
+  };
+
+  const toggleShowFavOnly = () => {
+    dispatch({ type: ACTIONS.TOGGLE_SHOW_FAV_ONLY, payload: !state.showFavOnly });
+  };
 
   return {
-    state,
-    updateToFavPhotoIds,
-    setPhotoSelected,
-    getPhotosByTopic,
-    getAllPhotos,
-    onClosePhotoDetailsModal,
-    setDark
+    ...state,
+    handlePhotoClick,
+    closeModal,
+    addFavPhoto,
+    removeFavPhoto,
+    updateTopic,
+    resetFilters,
+    toggleShowFavOnly,
   };
 };

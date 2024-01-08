@@ -1,46 +1,54 @@
-import React from 'react';
-import './App.scss';
-import HomeRoute from 'routes/HomeRoute';
-import PhotoDetailsModal from 'routes/PhotoDetailsModal';
-import { useApplicationData } from 'hooks/useApplicationData';
+import React, { useState } from "react";
 
+import HomeRoute from "./routes/HomeRoute";
+import PhotoDetailsModal from "./routes/PhotoDetailsModal";
+
+import { useApplicationData } from "./hooks/useApplicationData";
+
+import "./App.scss";
 const App = () => {
   const {
-    state: { likes, selectedPhoto, modal, photoData, topicData, dark },
-    updateToFavPhotoIds,
-    setPhotoSelected,
-    getPhotosByTopic,
-    getAllPhotos,
-    onClosePhotoDetailsModal,
-    setDark
+    showModal,
+    clickedPhoto,
+    favPhotos,
+    handlePhotoClick,
+    closeModal,
+    addFavPhoto,
+    removeFavPhoto,
+    topicsData,
+    photosData,
+    currentTopic,
+    updateTopic,
+    resetFilters,
+    showFavOnly,
+    toggleShowFavOnly,
+    
   } = useApplicationData();
-
-  const isLiked = photoId => likes.includes(photoId);
-  const isFavPhotoExist = likes.length > 0;
-
   return (
-    <div className={`App ${dark}`}>
+    <div className="App">
       <HomeRoute
-        isFavPhotoExist={isFavPhotoExist}
-        isLiked={isLiked}
-        toggleLike={updateToFavPhotoIds}
-        photos={photoData}
-        topics={topicData}
-        getPhotosByTopic={getPhotosByTopic}
-        getAllPhotos={getAllPhotos}
-        showModal={setPhotoSelected}
-        dark={dark}
-        setDark={setDark}
+        topics={topicsData}
+        photos={photosData}
+        onPhotoClick={handlePhotoClick}
+        favPhotos={favPhotos}
+        addFavPhoto={addFavPhoto}
+        removeFavPhoto={removeFavPhoto}
+        currentTopic={currentTopic}
+        updateTopic={updateTopic}
+        resetFilters={resetFilters}
+        showFavOnly={showFavOnly}
+        toggleShowFavOnly={toggleShowFavOnly}
       />
-      {modal &&
+      {showModal && (
         <PhotoDetailsModal
-          showModal={setPhotoSelected}
-          hideModal={onClosePhotoDetailsModal}
-          selectedPhoto={selectedPhoto}
-          isLiked={isLiked}
-          toggleLike={updateToFavPhotoIds}
-          dark={dark}
-        />}
+          clickedPhoto={clickedPhoto}
+          onClose={closeModal}
+          photos={photosData}
+          favPhotos={favPhotos}
+          addFavPhoto={addFavPhoto}
+          removeFavPhoto={removeFavPhoto}
+        />
+      )}
     </div>
   );
 };
