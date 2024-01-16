@@ -1,17 +1,14 @@
 .photo-details-modal {
   background-color: white;
-  box-shadow: 0 0 0 50vmax rgba(0,0,0,.5);
-  position: absolute;
-  top: 55%;
-  left: 50%;
-  transform: translate(-50%, -40%);
-  height: 80%;
-  width: 55%;
-  overflow-y: scroll;
-  border-radius: 12px;
+  position: fixed; 
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  overflow-y: auto; 
 }
 
-.photo-details-modal__close-button {
+.photo-details-modal--close-button {
   background-color: white;
   border: none;
   color: white;
@@ -24,17 +21,24 @@
   margin-top: 16px;
 }
 
-.photo-details-modal__images {
+.photo-details-modal--images {
   margin-left: 36px;
-  margin-top: 8px;
+  margin-top: 10px;
 }
 
-.photo-details-modal__image {
-  max-width: 95%;
+.photo-details-modal--mainimage {
+  display: flex;
+  justify-content: center;
+}
+
+.photo-details-modal--image {
+  max-height: 1000px;
+  max-width: auto;
   border-radius: 8px;
+  margin: 20px;
 }
 
-.photo-details-modal__top-bar {
+.photo-details-modal--top-bar {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -43,35 +47,32 @@
   align-items: center;
 }
 
-.photo-details-modal__photographer-details {
+.photo-details-modal--photographer-details {
   display: flex;
   font-size: 16px;
 }
 
-.photo-details-modal__header {
+.photo-details-modal--header {
   font-size: 18px;
   font-weight: 500;
   color: #1e1e1e;
   margin-top: 24px;
   margin-bottom: 24px;
+  margin-left: 15px;
   width: 90%;
 }
 
-.photo-details-modal__photographer-location {
-  color: #838383;
-}
-.photo-details-modal__photographer-profile {
-  object-fit: cover;
-  border-radius: 100%;
-  vertical-align: middle;
-  margin-right: 8px;
-  width: 40px;
-  height: 40px;
-}
+.photo-details-modal--info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 
-.photo-details-modal__photographer-info {
-  margin-top: 5px;
-  font-weight: 700;
-  font-size: 12px;
-  margin-left: 8px;
+  &--avatar {
+    object-fit: cover;
+    border-radius: 100%;
+    vertical-align: middle;
+    margin-right: 8px;
+    width: 40px;
+    height: 40px;
+  }
 }

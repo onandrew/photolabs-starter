@@ -1,49 +1,63 @@
-.photo-list__item {
-  margin: 24px;
-  padding: 8px;
+.photo-list--item {
+  background-color: #E8EDDF;
+  margin: 20px;
+  padding: 5px;
   border-width: 0.5px;
-  border-color: black;
+  border-color: 4D7298;
   border-style: solid;
-  border-radius: 12px;
+  border-radius: 16px;
   max-width: fit-content;
 }
 
-.photo-list__image {
+.photo-list--image {
   user-select: none;
   width: 300px;
   height: 200px;
   object-fit: cover;
 }
 
-.photo-list__image {
+.photo-list--image {
   border-radius: 8px 8px 0px 0px;
   user-select: none;
   width: 300px;
   height: 200px;
   object-fit: cover;
-  border-color: black;
+  border-color: 4D7298;
 }
 
-.photo-list__user-profile {
+.photo-list--user-profile {
   object-fit: cover;
   border-radius: 100%;
   vertical-align: middle;
   margin-right: 8px;
+  margin-left: 5%;
   width: 40px;
   height: 40px;
 }
 
-.photo-list__user-details {
+.photo-list--details--parent{
   display: flex;
+  margin-top: 10px;
+  margin-left: 5px;
 }
 
-.photo-list__user-info {
-  margin-top: 5px;
+.photo-list--user-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.photo-list--user-info {
+  margin-top: 10px;
   font-weight: 700;
-  font-size: 12px;
-  margin-left: 8px;
+  font-size: 15px;
+  margin-left: 0px;
+  margin-bottom:0px;
+
 }
 
-.photo-list__user-location {
+.photo-list--user-location {
   color: #838383;
+  margin-top: 0px;
 }
