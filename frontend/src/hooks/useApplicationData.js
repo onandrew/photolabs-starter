@@ -18,7 +18,7 @@ export const useApplicationData = () => {
     let url = "/api/photos";
 
     if (state.currentTopic !== undefined) {
-      url = `url =/api/topics/photos/${state.currentTopic}`;
+      url = `/api/topics/photos/${state.currentTopic}`;
     }
 
     fetch("/api/topics")
